@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ánh sáng từ bốn hũ sữa chua — The RenAIssance Edition</title>
+  <meta name="description" content="Thuyết trình điện ảnh tự làm pin nhôm – đồng từ 4 hũ sữa chua thắp sáng đèn LED 5 mm.">
+
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/effects.css">
+  <link rel="stylesheet" href="assets/css/nav.css">
+  <link rel="stylesheet" href="assets/css/scene.css">
+</head>
+<body>
+  <!-- Lớp vân phim Phục Hưng siêu mịn -->
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- =======================================================================
+       PRELOADER RADIAL INK-BLOT OPENING (0.0s – 0.85s, khớp #000 → #008)
+       ======================================================================= -->
+  <div id="preloader-overlay" class="preloader-overlay" aria-hidden="true">
+    <canvas id="preloader-canvas"></canvas>
+    <svg id="preloader-star" class="preloader-star" viewBox="0 0 32 32">
+      <path d="M16 1 L18.4 13.6 L31 16 L18.4 18.4 L16 31 L13.6 18.4 L1 16 L13.6 13.6 Z" fill="#E0B26B"/>
+    </svg>
+  </div>
+
+  <!-- =======================================================================
+       HUD TỐI GIẢN DUY NHẤT (E1): MINIMAP CHƯƠNG DỌC SIÊU MẢNH LỀ TRÁI
+       ======================================================================= -->
+  <nav id="minimap" class="minimap" aria-label="Mục lục chương"></nav>
+
+  <!-- Bảng ghi chú thuyết trình ẩn 100% mặc định (chỉ mở bằng phím N) -->
+  <aside id="presenter-notes" class="presenter-notes" aria-hidden="true">
+    <div class="notes-header">
+      <span id="notes-title">Ghi chú thuyết trình</span>
+      <span>ESC / N</span>
+    </div>
+    <p id="notes-body" class="notes-body"></p>
+  </aside>
+
+  <main id="presentation-root">
+
+    <!-- =====================================================================
+         PHẦN 0: HERO INTRO — WEBGL2 GLSL FRAGMENT SHADER THẬT (#000–#067)
+         Phong cảnh đồng quê Phục Hưng + 2 nhân vật bay vươn tay chạm ngón
+         → Chớp sáng trắng-đào tại điểm chạm → Rã fBM bụi sao GPU lộ Chương 1
+         ===================================================================== -->
+    <section id="hero-intro" data-chapter="0" class="hero-intro">
+      <div id="hero-sticky" class="hero-sticky">
+        <!-- Sân khấu WebGL2 GLSL đa lớp (nền + 2 nhân vật + HDR flare + rã fBM bụi sao GPU) -->
+        <div id="hero-stage" class="hero-stage">
+          <canvas id="hero-webgl-canvas" class="hero-webgl-canvas" aria-label="Cảnh mở đầu Phục Hưng hai nhân vật chạm ngón tay tan thành bụi sao"></canvas>
+
+          <!-- Khung chữ nhật đứng mảnh ở chính giữa bầu trời giống khung #004–#048 -->
+          <div id="hero-editorial-frame" class="hero-editorial-frame" aria-hidden="true">
+            <div class="hero-frame-top">
+              <div class="hero-frame-title">The<br>RenAIssance<br>Edition</div>
+            </div>
+            <div class="hero-frame-mid">
+              <p class="hero-frame-desc">Ánh sáng từ bốn hũ sữa chua — pin nhôm đồng thắp sáng đèn LED 5 mm ngay tại nhà.</p>
+            </div>
+            <div class="hero-frame-bottom">
+              <span class="hero-frame-meta">HÓA HỌC THỰC HÀNH · 60 ML H₂O₂ 3%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lớp bụi sao động tinh tế đồng bộ cùng rìa rã WebGL2 -->
+        <canvas id="hero-fx-canvas" aria-hidden="true"></canvas>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 1: Ý TƯỞNG — TỜ GIẤY RÁCH TRÀN MÀN HÌNH 100% (#068 → #100)
+         ===================================================================== -->
+    <section id="ch01-y-tuong" data-chapter="1" class="chapter chapter--ch01">
+      <div class="ch-painting">
+        <img class="ch-bg"
+             src="nguonanh/tinh/r01-fresco.webp"
+             alt="Bức bích họa Phục Hưng cổ điển"
+             fetchpriority="high" decoding="async">
+        <div class="ch-bg-dim" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+        <canvas id="ch01-atmosphere" style="position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;"></canvas>
+        <img class="ch-fg ch01-candle-fg"
+             src="nguonanh/tinh/r-fg-candle-jar.webp"
+             alt="Ngọn lửa trong lọ thủy tinh" decoding="async">
+      </div>
+
+      <div class="ch-flow">
+        <header class="ch-title-stage">
+          <h1 class="ch-title">Ý tưởng</h1>
+          <p class="ch-subtitle"><span class="sub-cap">Á</span>nh sáng từ bốn hũ sữa chua — pin nhôm đồng thắp sáng đèn LED 5 mm ngay tại nhà</p>
+        </header>
+
+        <!-- Tờ giấy rách tràn toàn màn hình 100% phủ mượt qua bức bích họa (#096–#100) -->
+        <div class="parchment-wrap parchment-wrap--bleed">
+          <div class="torn-edge-top" aria-hidden="true">
+            <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+              <path d="M0,90 L0,52 Q36,42 74,50 T156,34 Q206,24 256,39 T368,26 Q426,14 484,31 T608,20 Q672,10 736,26 T868,16 Q936,6 1002,24 T1134,19 Q1204,8 1272,26 T1386,18 L1440,29 L1440,90 Z"
+                    fill="#DFD6C7"/>
+              <path d="M0,90 L0,58 L28,53 L58,59 L92,47 L128,54 L166,40 L204,48 L244,36 L286,44 L328,31 L374,39 L418,26 L466,36 L514,24 L564,33 L614,22 L666,31 L718,20 L772,30 L826,19 L880,28 L936,18 L992,27 L1048,20 L1106,29 L1164,19 L1222,28 L1280,21 L1338,30 L1392,23 L1440,34 L1440,90 Z"
+                    fill="#EFEAE0"/>
+            </svg>
+          </div>
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-inner">
+              <!-- Tạp chí mở đầu: Ảnh thí nghiệm thực tế + 3 con số trụ cột bằng mực đen sạch -->
+              <div class="ch01-editorial-hero">
+                <img class="ch01-hero-photo" src="nguonanh/tinh/exp-4cups-series-led.webp" alt="Bốn hũ sữa chua nối tiếp thắp sáng đèn LED 5 mm đỏ" decoding="async">
+                <div class="ch01-stat-stack">
+                  <div class="ch01-stat-row">
+                    <span class="ed-kicker">Hiệu điện thế bộ 4 hũ nối tiếp</span>
+                    <div class="ch01-stat-num">2,4–2,8 V</div>
+                    <p class="ch01-stat-label">Mỗi hũ pin nhôm – đồng tạo <strong>0,6–0,7 V</strong>; mắc nối tiếp 4 tế bào cộng dồn điện áp vượt xa ngưỡng phát sáng của đi-ốt LED.</p>
+                  </div>
+                  <div class="ch01-stat-row">
+                    <span class="ed-kicker">Ngưỡng mở bóng LED 5 mm đỏ / vàng</span>
+                    <div class="ch01-stat-num">1,8–2,0 V</div>
+                    <p class="ch01-stat-label">Điện áp thuận V<sub>F</sub> thấp nhất trong họ đèn LED thông dụng, bừng sáng đỏ rực ngay khoảnh khắc rót xong hũ thứ tư.</p>
+                  </div>
+                  <div class="ch01-stat-row">
+                    <span class="ed-kicker">Chất oxi hóa tăng cường chuẩn (A1)</span>
+                    <div class="ch01-stat-num">60 ml H<sub>2</sub>O<sub>2</sub></div>
+                    <p class="ch01-stat-label">Bổ sung 1 chai nhỏ oxy già y tế 3% vào ly nước ấm pha 3 muỗng muối và nước cốt 1 quả chanh để đẩy mạnh dòng sáng.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cặp ảnh biên tập sạch (không hộp khung SaaS) -->
+              <div class="ch01-visual-duet">
+                <article class="ch01-duet-item">
+                  <img src="nguonanh/tinh/r01-book.webp" alt="Tài liệu cảm hứng pin điện hóa Volta" decoding="async">
+                  <h3>Từ cột pin Volta cổ điển tới gian bếp</h3>
+                  <p>Tái hiện nguyên lý pin điện hóa thế kỷ XVIII bằng vật liệu đời thường: vỏ hũ sữa chua nhựa sạch, giấy bạc nhôm, dây đồng lõi và dung dịch nước muối chanh – oxy già.</p>
+                </article>
+                <article class="ch01-duet-item">
+                  <img src="nguonanh/tinh/r01-led-glow.webp" alt="Đèn LED 5 mm đỏ phát sáng" decoding="async">
+                  <h3>Ánh sáng bán dẫn từ dòng electron tự nhiên</h3>
+                  <p>Nhôm bị oxi hóa nhường electron ở cực âm; dòng electron đi qua mạch ngoài thắp sáng vòm thấu kính LED 5 mm rồi sang cực đồng gặp O₂ và H₂O₂.</p>
+                </article>
+              </div>
+
+              <!-- Bảng tóm lược 3 cột chuẩn tạp chí -->
+              <div class="parchment-head">
+                <h3 class="parchment-heading">Tóm lược Chương I — Bức tranh toàn cảnh</h3>
+                <span class="parchment-tag">01 / 12 · Khởi nguồn</span>
+              </div>
+              <div class="parchment-cols">
+                <div class="parch-col">
+                  <h4>1. Nguyên lý cốt lõi</h4>
+                  <p>Nhôm có tính khử mạnh nên bị oxi hóa nhường electron ở cực âm; electron theo mạch ngoài thắp sáng đèn LED 5 mm rồi sang cực đồng gặp O₂ và H₂O₂.</p>
+                </div>
+                <div class="parch-col">
+                  <h4>2. Công thức tăng cường (A1)</h4>
+                  <p>1 ly nước ấm (250–300 ml) + 3 muỗng muối ăn + nước cốt 1 quả chanh (hoặc 3 muỗng giấm) + <strong>60 ml oxy già H₂O₂ 3%</strong>.</p>
+                </div>
+                <div class="parch-col">
+                  <h4>3. Ba trụ cột bài thuyết trình</h4>
+                  <p>Lắp ghép chuẩn hình học &amp; nối tiếp 4 hũ → Giải thích sâu cơ chế điện hóa (B3) → Đo kiểm trực tiếp (C1) &amp; vận hành an toàn.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 2: VẬT LIỆU — THẺ THẢ NỔI 3D RẢI RÁC THEO CHIỀU SÂU (#101 → #130)
+         ===================================================================== -->
+    <section id="ch02-vat-lieu" data-chapter="2" class="chapter chapter--ch02">
+      <div class="torn-edge-reverse" aria-hidden="true">
+        <svg viewBox="0 0 1440 86" preserveAspectRatio="none">
+          <path d="M0,86 L0,48 L36,40 L78,50 L124,33 L170,42 L220,28 L272,38 L326,24 L382,35 L440,20 L498,31 L556,17 L618,28 L678,19 L738,31 L800,16 L862,27 L924,20 L986,32 L1050,18 L1112,29 L1176,22 L1238,34 L1302,23 L1366,33 L1410,27 L1440,36 L1440,86 Z"
+                fill="#1D1712"/>
+          <path d="M0,86 L0,54 L36,47 L78,56 L124,40 L170,49 L220,34 L272,44 L326,30 L382,41 L440,26 L498,37 L556,23 L618,35 L678,25 L738,37 L800,22 L862,33 L924,26 L986,38 L1050,24 L1112,35 L1176,28 L1238,40 L1302,29 L1366,39 L1410,33 L1440,42 L1440,86 Z"
+                fill="#0B0A09"/>
+        </svg>
+      </div>
+
+      <div class="ch-painting">
+        <img loading="lazy" class="ch-bg" src="nguonanh/tinh/r02-stilllife.webp" alt="Tranh tĩnh vật cổ điển Phục Hưng" decoding="async">
+        <div class="ch-bg-dim" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+        <img loading="lazy" class="ch-fg ch02-fg-copper" src="nguonanh/tinh/r-fg-copper-wires.webp" alt="Chùm dây đồng lõi đã tuốt vỏ" decoding="async">
+        <img loading="lazy" class="ch-fg ch02-fg-led" src="nguonanh/tinh/r-fg-led-red.webp" alt="Đèn LED 5 mm đỏ 2 chân" decoding="async">
+      </div>
+
+      <div class="ch-flow ch-flow--framed">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">Vật liệu</h2>
+          <p class="ch-subtitle"><span class="sub-cap">C</span>hỉ cần bốn món quen thuộc — vỏ hũ sữa chua, giấy bạc nhôm, dây đồng lõi và một bóng LED 5 mm</p>
+        </header>
+
+        <!-- 4 Tấm thẻ trắng thả nổi so le theo chiều sâu trên nền tranh tối (#112–#126) -->
+        <div class="ch02-fan-stage">
+          <div class="ch02-fan-grid">
+            <article class="card-3d-float" data-fan="0">
+              <img loading="lazy" src="nguonanh/tinh/vl-hu.webp" alt="4 vỏ hũ sữa chua sạch" decoding="async">
+              <span class="card-3d-num">01 · Khoang chứa</span>
+              <h3>4 vỏ hũ sữa chua</h3>
+              <p>Nhựa sạch đã rửa hết sữa, mỗi hũ chứa 65–75 ml dung dịch điện phân (~2/3 hũ).</p>
+            </article>
+
+            <article class="card-3d-float" data-fan="1">
+              <img loading="lazy" src="nguonanh/tinh/vl-giaybac.webp" alt="Bản giấy bạc nhôm" decoding="async">
+              <span class="card-3d-num">02 · Cực âm (Anot)</span>
+              <h3>4 bản giấy bạc 2,5 × 8 cm</h3>
+              <p>Gấp phẳng từ giấy bạc bếp, hoặc cắt từ vỏ lon nhôm đã chà sạch lớp sơn cách điện.</p>
+            </article>
+
+            <article class="card-3d-float" data-fan="2">
+              <img loading="lazy" src="nguonanh/tinh/vl-daydong.webp" alt="Dây đồng lõi lột sạch vỏ" decoding="async">
+              <span class="card-3d-num">03 · Cực dương (Catot)</span>
+              <h3>4 đoạn dây đồng 15 cm</h3>
+              <p>Tuốt sạch hoàn toàn vỏ nhựa cách điện để đồng tiếp xúc trực tiếp với dung dịch.</p>
+            </article>
+
+            <article class="card-3d-float" data-fan="3">
+              <img loading="lazy" src="nguonanh/tinh/vl-led.webp" alt="Bóng đèn LED 5 mm" decoding="async">
+              <span class="card-3d-num">04 · Tải phát sáng</span>
+              <h3>1 bóng LED 5 mm</h3>
+              <p>Ưu tiên LED <strong>đỏ hoặc vàng</strong> vì ngưỡng V<sub>F</sub> chỉ 1,8–2,0 V — dễ thắp sáng nhất.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- Tấm trình bày trắng nổi bật cuối Chương 2 (#127–#130) -->
+        <div class="ch02-hero-card">
+          <div>
+            <span class="ed-kicker">Vì sao chọn LED 5 mm đỏ / vàng?</span>
+            <h3 class="ed-plate-title" style="margin:0.55rem 0 0.85rem;">Ngưỡng sáng thấp nhất trong họ đèn LED</h3>
+            <p class="ed-plate-text">
+              Theo datasheet Vishay &amp; Kingbright, LED 5 mm đỏ chỉ cần <strong>1,8–2,0 V</strong> để phát quang rõ rệt, trong khi LED xanh dương/trắng đòi tới 3,0–3,3 V. Vì vậy 4 hũ pin nối tiếp (2,4–2,8 V) thắp LED đỏ cực kỳ rực rỡ và bền áp.
+            </p>
+          </div>
+          <img loading="lazy" src="nguonanh/tinh/r02-led.webp" alt="Cận cảnh bóng đèn LED 5 mm" decoding="async">
+        </div>
+
+        <!-- Tờ mục lục giấy kem căn giữa 74vw -->
+        <div class="parchment-wrap parchment-wrap--framed">
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-head">
+              <h3 class="parchment-heading">Bảng định mức vật liệu chuẩn</h3>
+              <span class="parchment-tag">02 / 12 · Bốn món cốt lõi</span>
+            </div>
+            <div class="parchment-cols">
+              <div class="parch-col">
+                <h4>Bản nhôm (Cực âm)</h4>
+                <p>4 dải giấy bạc gấp phẳng <strong>2,5 × 8 cm</strong>. Nếu dùng vỏ lon nước ngọt, cần dùng giấy nhám chà sạch lớp sơn và màng nhựa phủ hai mặt.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Dây đồng (Cực dương)</h4>
+                <p>4 đoạn dây đồng lõi dài <strong>15 cm</strong>, tuốt sạch vỏ nhựa để lộ lõi đồng sáng. Đồng không bị ăn mòn nên có thể tái sử dụng nhiều lần.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Bóng LED &amp; Phụ kiện</h4>
+                <p>1 bóng LED 5 mm đỏ/vàng (phân biệt chân dài <code>+</code>, chân ngắn <code>−</code>), kèm băng keo cố định điện cực chắc chắn lên miệng 4 hũ.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 3: ĐIỆN CỰC — TỜ GIẤY RÁCH TRÀN 100%, POLAROID & INTERLUDE (#131 → #179)
+         ===================================================================== -->
+    <section id="ch03-dien-cuc" data-chapter="3" class="chapter chapter--ch03">
+      <div class="torn-edge-reverse" aria-hidden="true">
+        <svg viewBox="0 0 1440 86" preserveAspectRatio="none">
+          <path d="M0,86 L0,44 Q54,30 112,41 T236,26 Q306,15 374,30 T512,21 Q590,9 666,26 T812,17 Q890,7 968,24 T1120,19 Q1204,11 1286,28 T1440,24 L1440,86 Z" fill="#2A1110"/>
+          <path d="M0,86 L0,52 L48,43 L102,52 L158,36 L216,45 L276,30 L338,39 L400,26 L464,36 L530,22 L598,33 L666,20 L736,31 L806,18 L876,30 L948,19 L1020,31 L1094,20 L1168,32 L1242,23 L1316,33 L1384,26 L1440,35 L1440,86 Z" fill="#0B0A09"/>
+        </svg>
+      </div>
+
+      <div class="ch-painting">
+        <img loading="lazy" class="ch-bg" src="nguonanh/tinh/r03-manuscript.webp" alt="Bản thảo và kiến trúc Baroque cổ điển" decoding="async">
+        <div class="ch03-baroque-tint" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+        <img loading="lazy" class="ch-fg ch03-fg-scale" src="nguonanh/tinh/r-fg-scale.webp" alt="Cân tiểu ly cổ điển" decoding="async">
+      </div>
+
+      <div class="ch-flow">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">Điện cực</h2>
+          <p class="ch-subtitle"><span class="sub-cap">P</span>hẳng ở dưới để mở rộng tiếp xúc · giữ khô tuyệt đối hai xăng-ti-mét mối xoắn phía trên</p>
+        </header>
+
+        <!-- Tờ giấy rách tràn màn hình 100% (#142–#165) -->
+        <div class="parchment-wrap parchment-wrap--bleed">
+          <div class="torn-edge-top" aria-hidden="true">
+            <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+              <path d="M0,90 L0,48 Q38,35 82,46 T174,30 Q232,20 294,35 T418,24 Q488,12 558,27 T698,18 Q770,9 842,24 T988,17 Q1062,9 1136,26 T1284,19 Q1362,12 1440,27 L1440,90 Z" fill="#DFD6C7"/>
+              <path d="M0,90 L0,55 L36,47 L80,55 L128,40 L178,48 L232,32 L288,42 L346,27 L404,37 L464,23 L526,33 L588,20 L652,31 L716,19 L782,29 L848,17 L916,28 L984,19 L1052,30 L1120,18 L1188,29 L1256,21 L1324,31 L1388,24 L1440,34 L1440,90 Z" fill="#EFEAE0"/>
+            </svg>
+          </div>
+
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-inner">
+              <!-- Bản vẽ hình học 1 cầu nối (#147–#151) -->
+              <div class="ch03-blueprint-box">
+                <div class="ch03-blueprint-media">
+                  <img loading="lazy" src="nguonanh/tinh/vl-giaybac.webp" alt="Cận cảnh lá giấy bạc nhôm gấp phẳng" decoding="async">
+                </div>
+                <div class="ch03-dims-svg">
+                  <span class="ed-kicker" style="color:rgba(245,240,230,0.58);margin-bottom:0.75rem;">Bản vẽ hình học 1 cầu nối · 2,5 × 8 cm</span>
+                  <svg viewBox="0 0 380 220" width="100%" aria-label="Sơ đồ kích thước bản giấy bạc 2,5 × 8 cm">
+                    <line x1="20" y1="86" x2="360" y2="86" stroke="#D9A862" stroke-width="1.3" stroke-dasharray="6 5"/>
+                    <text x="172" y="77" fill="#D9A862" font-family="JetBrains Mono, monospace" font-size="10">MIỆNG HŨ (GIỮ KHÔ)</text>
+                    <rect x="20" y="90" width="340" height="114" rx="6" fill="rgba(46, 128, 122, 0.14)"/>
+                    <rect x="86" y="34" width="66" height="156" rx="4" fill="url(#foilGrad)" stroke="#E5E7EB" stroke-width="1.2"/>
+                    <defs>
+                      <linearGradient id="foilGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#D7DCE2"/>
+                        <stop offset="50%" stop-color="#F8FAFC"/>
+                        <stop offset="100%" stop-color="#9CA3AF"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M84,48 Q119,40 154,48 M84,58 Q119,50 154,58 M84,68 Q119,60 154,68 M154,58 C215,58 242,40 284,40 C316,40 326,75 326,178"
+                          fill="none" stroke="#E09B4B" stroke-width="4.2" stroke-linecap="round"/>
+                    <line x1="68" y1="34" x2="68" y2="82" stroke="#F2CE88" stroke-width="1.2"/>
+                    <text x="14" y="62" fill="#F2CE88" font-family="JetBrains Mono, monospace" font-size="11">2 cm</text>
+                    <line x1="68" y1="90" x2="68" y2="190" stroke="#7AD8CE" stroke-width="1.2"/>
+                    <text x="14" y="145" fill="#7AD8CE" font-family="JetBrains Mono, monospace" font-size="11">6 cm</text>
+                    <text x="166" y="142" fill="#F5F0E6" font-family="Be Vietnam Pro, sans-serif" font-size="11">Phần phẳng ngâm nước</text>
+                    <text x="166" y="159" fill="#9CA3AF" font-family="Be Vietnam Pro, sans-serif" font-size="10">Tăng diện tích tiếp xúc ion</text>
+                    <text x="242" y="28" fill="#D9A862" font-family="JetBrains Mono, monospace" font-size="10">Dây đồng sang hũ sau →</text>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Scattered Polaroid Collage lệch tốc độ (#152–#155) -->
+              <div class="polaroid-zone">
+                <div>
+                  <span class="parchment-tag">Cấu trúc 3 cầu nối + 2 đầu ra</span>
+                  <h3 class="parchment-heading" style="margin:0.65rem 0 0.9rem;">Chi tiết từng lớp tiếp xúc</h3>
+                  <p style="font-size:0.94rem;line-height:1.72;color:#484037;">
+                    Làm <strong>3 cầu nối</strong> (mỗi cầu gồm 1 bản giấy bạc xoắn chặt với 1 dây đồng). Bản giấy bạc thứ tư và đoạn dây đồng thứ tư dành riêng cho hai đầu ngoài cùng đưa tới hai chân bóng LED 5 mm.
+                  </p>
+                </div>
+                <div class="polaroid-canvas">
+                  <figure class="polaroid-item polaroid-1" data-pspeed="0.7">
+                    <img loading="lazy" src="nguonanh/tinh/tinh-nhom-macro.webp" alt="Bề mặt nhôm cận cảnh" decoding="async">
+                    <figcaption class="polaroid-cap">Lá nhôm phẳng 6 cm</figcaption>
+                  </figure>
+                  <figure class="polaroid-item polaroid-2" data-pspeed="1.3">
+                    <img loading="lazy" src="nguonanh/tinh/r02-copper.webp" alt="Dây đồng tinh khiết" decoding="async">
+                    <figcaption class="polaroid-cap">Lõi đồng 15 cm sáng bóng</figcaption>
+                  </figure>
+                  <figure class="polaroid-item polaroid-3" data-pspeed="0.9">
+                    <img loading="lazy" src="nguonanh/tinh/vl-hu.webp" alt="Bốn vỏ hũ sữa chua nhựa sạch" decoding="async">
+                    <figcaption class="polaroid-cap">4 vỏ hũ sạch cách điện</figcaption>
+                  </figure>
+                  <figure class="polaroid-item polaroid-4" data-pspeed="1.45">
+                    <img loading="lazy" src="nguonanh/tinh/vl-daydong.webp" alt="Dây đồng lõi đã tuốt vỏ" decoding="async">
+                    <figcaption class="polaroid-cap">Xoắn chặt 2 cm trên miệng</figcaption>
+                  </figure>
+                  <figure class="polaroid-item polaroid-5" data-pspeed="0.8">
+                    <img loading="lazy" src="nguonanh/tinh/exp-4cups-series-led.webp" alt="Hai điện cực nhôm đồng đặt đối diện hai mép hũ sữa chua" decoding="async">
+                    <figcaption class="polaroid-cap">Đặt đối diện 2 mép hũ</figcaption>
+                  </figure>
+                </div>
+              </div>
+
+              <!-- 3 Thẻ bước dọc sạch trên băng nền mực tối (#156–#160) -->
+              <div class="ch03-triptych-wrap">
+                <div class="ch03-triptych">
+                  <article class="ch03-step-card">
+                    <span class="card-3d-num">Bước 01</span>
+                    <h4 style="font-family:var(--font-display);font-size:1.28rem;font-weight:500;">Gấp phẳng 2,5 × 8 cm</h4>
+                    <p style="font-size:0.89rem;line-height:1.65;color:#484037;">Gấp nhiều lớp giấy bạc cho cứng cáp, vuốt phẳng phần 6 cm dưới để tối đa hóa diện tích phản ứng với dung dịch muối chanh – H₂O₂.</p>
+                  </article>
+                  <article class="ch03-step-card">
+                    <span class="card-3d-num">Bước 02</span>
+                    <h4 style="font-family:var(--font-display);font-size:1.28rem;font-weight:500;">Xoắn chặt 2 cm đầu trên</h4>
+                    <p style="font-size:0.89rem;line-height:1.65;color:#484037;">Quấn chặt lõi đồng vào 2 cm đầu trên của lá nhôm để giảm điện trở tiếp xúc, uốn gập gác chắc chắn lên thành miệng hũ.</p>
+                  </article>
+                  <article class="ch03-step-card">
+                    <span class="card-3d-num">Bước 03</span>
+                    <h4 style="font-family:var(--font-display);font-size:1.28rem;font-weight:500;">Giữ khô tuyệt đối mối nối</h4>
+                    <p style="font-size:0.89rem;line-height:1.65;color:#484037;">Nếu mối xoắn bị ngập dung dịch, nhôm và đồng tạo pin ngắn mạch ngay tại chỗ — ăn mòn lá nhôm nhanh mà không đưa dòng qua LED.</p>
+                  </article>
+                </div>
+              </div>
+
+              <!-- Tóm lược 3 cột (#161–#165) -->
+              <div class="parchment-head">
+                <h3 class="parchment-heading">Tóm lược Chương III — Hình học điện cực</h3>
+                <span class="parchment-tag">03 / 12 · Phẳng dưới, khô trên</span>
+              </div>
+              <div class="parchment-cols">
+                <div class="parch-col">
+                  <h4>Diện tích tiếp xúc</h4>
+                  <p>Lá nhôm để phẳng (không vo tròn) giúp dòng ion tiếp xúc đều khắp bề mặt, giảm nội trở và tăng cường độ dòng cho LED 5 mm.</p>
+                </div>
+                <div class="parch-col">
+                  <h4>Cách ly hai cực cùng hũ</h4>
+                  <p>Mỗi hũ chứa 1 lá nhôm và 1 dây đồng đặt ở hai mép đối diện nhau, cách nhau <strong>2–3 cm</strong>, dán băng keo cố định chống xê dịch.</p>
+                </div>
+                <div class="parch-col">
+                  <h4>Chuẩn bị cho mạch nối tiếp</h4>
+                  <p>3 cầu nối liên kết 4 hũ thành một chuỗi liền mạch; dây đồng hũ 1 và giấy bạc hũ 4 sẵn sàng cấp nguồn cho bóng LED 5 mm.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DARK ENGRAVED INTERLUDE ("Introducing..." — khớp #166–#179) -->
+      <div class="ch03-interlude">
+        <img loading="lazy" class="interlude-engraving" src="nguonanh/tinh/r03-manuscript.webp" alt="" aria-hidden="true">
+        <div class="engraved-shimmer" aria-hidden="true"></div>
+        <div class="interlude-header">
+          <div class="interlude-kicker">Bước vào tâm điểm kiến trúc mạch</div>
+          <h3 class="interlude-title">Kiến trúc nối tiếp</h3>
+          <p style="margin-top:0.9rem;font-size:0.98rem;color:var(--text-muted);line-height:1.68;">
+            Khi bốn tế bào đơn lẻ liên kết theo một trục thống nhất, hiệu điện thế cộng dồn để đánh thức ánh sáng trong vòm thấu kính 5 mm.
+          </p>
+        </div>
+        <div class="interlude-preview">
+          <img loading="lazy" src="nguonanh/tinh/exp-4cups-series-led.webp" alt="Bốn hũ sữa chua mắc nối tiếp với lá nhôm và dây đồng đang thắp sáng đèn LED 5 mm đỏ" decoding="async">
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 4: SIÊU CAO TRÀO 3D THREE.JS THẬT 100% — HÀNH LANG CỘT CẨM THẠCH
+         + DOLLY-IN + NGỬA CAMERA 90° LÊN VÒM OCULUS + LED 5 MM PBR (#180 → #228)
+         ===================================================================== -->
+    <section id="ch04-mac-noi-tiep" data-chapter="4" class="chapter chapter--ch04">
+      <div class="ch04-stage" id="ch04-stage">
+        <!-- CẢNH 3D THREE.JS THẬT 100% (Cột cẩm thạch + Mái vòm Oculus + Trời GLSL + Tia nắng + Bồ câu 3D + LED 5 mm PBR) -->
+        <canvas id="ch04-three-canvas" aria-label="Không gian kiến trúc 3D hành lang cột cẩm thạch ngửa lên mái vòm Oculus cùng mô hình 3D đèn LED 5 mm"></canvas>
+        <div class="ch04-stage-vignette" aria-hidden="true"></div>
+
+        <div class="ch04-callouts" id="ch04-callouts">
+          <div class="ch04-callout">
+            <div class="ch04-callout-label">Vòm thấu kính 5 mm</div>
+            <div class="ch04-callout-val">LED đỏ chuẩn · Ngưỡng sáng 1,8–2,0 V</div>
+          </div>
+          <div class="ch04-callout">
+            <div class="ch04-callout-label">Chân dài (+) · Anode LED</div>
+            <div class="ch04-callout-val">Nối thẳng vào dây đồng hũ 1</div>
+          </div>
+          <div class="ch04-callout">
+            <div class="ch04-callout-label">Chân ngắn (−) · Cathode LED</div>
+            <div class="ch04-callout-val">Nối thẳng vào giấy bạc hũ 4</div>
+          </div>
+        </div>
+
+        <div class="ch04-oculus-badge" id="ch04-oculus-badge">
+          <h3>Quỹ đạo ánh sáng 360°</h3>
+          <p>4 tế bào nối tiếp · V<sub>tổng</sub> = V₁ + V₂ + V₃ + V₄ ≈ 2,4–2,8 V</p>
+        </div>
+      </div>
+
+      <div class="ch04-flow">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">Nối tiếp</h2>
+          <p class="ch-subtitle"><span class="sub-cap">C</span>ực âm hũ này sang cực dương hũ kế tiếp — cộng dồn hiệu điện thế đánh thức bóng LED 5 mm</p>
+        </header>
+
+        <div class="ch04-orbit-spacer" id="ch04-orbit-spacer" aria-hidden="true"></div>
+
+        <!-- Mảng biên tập trượt lên giữa tâm mái vòm Oculus (74vw để vòm tròn lộ hai bên) -->
+        <div class="ed-stage">
+          <article class="ed-plate ed-plate--dark">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:0.8rem;">
+              <div>
+                <span class="ed-kicker">Sơ đồ mắc nối tiếp chuẩn</span>
+                <h3 class="ed-plate-title" style="margin-top:0.35rem;">Bốn hũ sữa chua nối tiếp thắp sáng đèn LED 5 mm</h3>
+              </div>
+              <span class="chem-eq">V<sub>tổng</sub> = 4 × (0,6–0,7 V) = 2,4–2,8 V</span>
+            </div>
+
+            <div class="series-svg-wrap">
+              <svg viewBox="0 0 960 270" width="100%" aria-label="Sơ đồ mắc nối tiếp 4 hũ pin nhôm đồng thắp sáng LED 5 mm">
+                <path d="M128,118 L128,44 L448,44" fill="none" stroke="#D9A862" stroke-width="3.2" stroke-linecap="round"/>
+                <path d="M128,118 L128,44 L448,44" fill="none" stroke="#FFF4D6" stroke-width="2" class="electron-path-flow"/>
+                <path d="M832,118 L832,44 L512,44" fill="none" stroke="#9CA3AF" stroke-width="3.2" stroke-linecap="round"/>
+                <path d="M512,44 L832,44 L832,118" fill="none" stroke="#7AD8CE" stroke-width="2" class="electron-path-flow"/>
+
+                <g transform="translate(480, 44)">
+                  <circle r="34" fill="rgba(255,75,62,0.22)"/>
+                  <path d="M-16,10 L-16,-6 A16,16 0 0,1 16,-6 L16,10 Z" fill="#FF4B3E" stroke="#FFD6D1" stroke-width="1.5"/>
+                  <rect x="-20" y="9" width="40" height="5" rx="2" fill="#FF6E63"/>
+                  <circle cx="0" cy="-6" r="5" fill="#FFF3C4"/>
+                  <text x="-76" y="-8" fill="#F2CE88" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">(+) Dài</text>
+                  <text x="28" y="-8" fill="#9CA3AF" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">(−) Ngắn</text>
+                  <text x="0" y="34" text-anchor="middle" fill="#F5F0E6" font-family="JetBrains Mono, monospace" font-size="11">LED 5 mm (1,8–2,0 V)</text>
+                </g>
+
+                <path d="M222,118 C222,82 328,82 328,118" fill="none" stroke="#E09B4B" stroke-width="3.4"/>
+                <path d="M222,118 C222,82 328,82 328,118" fill="none" stroke="#FFF4D6" stroke-width="1.8" class="electron-path-flow"/>
+                <path d="M422,118 C422,82 528,82 528,118" fill="none" stroke="#E09B4B" stroke-width="3.4"/>
+                <path d="M422,118 C222,82 528,82 528,118" fill="none" stroke="none"/>
+                <path d="M422,118 C422,82 528,82 528,118" fill="none" stroke="#FFF4D6" stroke-width="1.8" class="electron-path-flow"/>
+                <path d="M622,118 C622,82 728,82 728,118" fill="none" stroke="#E09B4B" stroke-width="3.4"/>
+                <path d="M622,118 C622,82 728,82 728,118" fill="none" stroke="#FFF4D6" stroke-width="1.8" class="electron-path-flow"/>
+
+                <g transform="translate(95, 118)">
+                  <path d="M0,0 L160,0 L146,120 L14,120 Z" fill="rgba(255,255,255,0.05)" stroke="rgba(245,240,230,0.32)" stroke-width="1.5"/>
+                  <path d="M5,36 L155,36 L146,120 L14,120 Z" fill="rgba(56,163,152,0.22)"/>
+                  <rect x="28" y="-6" width="10" height="104" rx="3" fill="#D98A3C"/>
+                  <rect x="116" y="-6" width="20" height="104" rx="3" fill="#CBD5E1"/>
+                  <text x="33" y="138" text-anchor="middle" fill="#D9A862" font-family="JetBrains Mono, monospace" font-size="11">Cu (+)</text>
+                  <text x="126" y="138" text-anchor="middle" fill="#CBD5E1" font-family="JetBrains Mono, monospace" font-size="11">Al (−)</text>
+                  <text x="80" y="88" text-anchor="middle" fill="#F5F0E6" font-family="Be Vietnam Pro, sans-serif" font-size="12" font-weight="600">HŨ 1</text>
+                </g>
+                <g transform="translate(295, 118)">
+                  <path d="M0,0 L160,0 L146,120 L14,120 Z" fill="rgba(255,255,255,0.05)" stroke="rgba(245,240,230,0.32)" stroke-width="1.5"/>
+                  <path d="M5,36 L155,36 L146,120 L14,120 Z" fill="rgba(56,163,152,0.22)"/>
+                  <rect x="28" y="-6" width="10" height="104" rx="3" fill="#D98A3C"/>
+                  <rect x="116" y="-6" width="20" height="104" rx="3" fill="#CBD5E1"/>
+                  <text x="33" y="138" text-anchor="middle" fill="#D9A862" font-family="JetBrains Mono, monospace" font-size="11">Cu (+)</text>
+                  <text x="126" y="138" text-anchor="middle" fill="#CBD5E1" font-family="JetBrains Mono, monospace" font-size="11">Al (−)</text>
+                  <text x="80" y="88" text-anchor="middle" fill="#F5F0E6" font-family="Be Vietnam Pro, sans-serif" font-size="12" font-weight="600">HŨ 2</text>
+                </g>
+                <g transform="translate(495, 118)">
+                  <path d="M0,0 L160,0 L146,120 L14,120 Z" fill="rgba(255,255,255,0.05)" stroke="rgba(245,240,230,0.32)" stroke-width="1.5"/>
+                  <path d="M5,36 L155,36 L146,120 L14,120 Z" fill="rgba(56,163,152,0.22)"/>
+                  <rect x="28" y="-6" width="10" height="104" rx="3" fill="#D98A3C"/>
+                  <rect x="116" y="-6" width="20" height="104" rx="3" fill="#CBD5E1"/>
+                  <text x="33" y="138" text-anchor="middle" fill="#D9A862" font-family="JetBrains Mono, monospace" font-size="11">Cu (+)</text>
+                  <text x="126" y="138" text-anchor="middle" fill="#CBD5E1" font-family="JetBrains Mono, monospace" font-size="11">Al (−)</text>
+                  <text x="80" y="88" text-anchor="middle" fill="#F5F0E6" font-family="Be Vietnam Pro, sans-serif" font-size="12" font-weight="600">HŨ 3</text>
+                </g>
+                <g transform="translate(695, 118)">
+                  <path d="M0,0 L160,0 L146,120 L14,120 Z" fill="rgba(255,255,255,0.05)" stroke="rgba(245,240,230,0.32)" stroke-width="1.5"/>
+                  <path d="M5,36 L155,36 L146,120 L14,120 Z" fill="rgba(56,163,152,0.22)"/>
+                  <rect x="28" y="-6" width="10" height="104" rx="3" fill="#D98A3C"/>
+                  <rect x="116" y="-6" width="20" height="104" rx="3" fill="#CBD5E1"/>
+                  <text x="33" y="138" text-anchor="middle" fill="#D9A862" font-family="JetBrains Mono, monospace" font-size="11">Cu (+)</text>
+                  <text x="126" y="138" text-anchor="middle" fill="#CBD5E1" font-family="JetBrains Mono, monospace" font-size="11">Al (−)</text>
+                  <text x="80" y="88" text-anchor="middle" fill="#F5F0E6" font-family="Be Vietnam Pro, sans-serif" font-size="12" font-weight="600">HŨ 4</text>
+                </g>
+              </svg>
+            </div>
+          </article>
+
+          <div class="ed-split-60-40">
+            <article class="ed-plate ed-plate--dark">
+              <span class="ed-kicker">Thứ tự đấu dây 5 bước</span>
+              <h3 class="ed-plate-title">Cực âm hũ trước → Cực dương hũ sau</h3>
+              <ul class="series-steps-list">
+                <li><strong>01</strong><span>Giấy bạc hũ 1 (−) → xoắn nối dây đồng hũ 2 (+)</span></li>
+                <li><strong>02</strong><span>Giấy bạc hũ 2 (−) → xoắn nối dây đồng hũ 3 (+)</span></li>
+                <li><strong>03</strong><span>Giấy bạc hũ 3 (−) → xoắn nối dây đồng hũ 4 (+)</span></li>
+                <li><strong>04</strong><span>Dây đồng tự do hũ 1 (+) → kẹp vào <strong>chân dài (+) của LED 5 mm</strong></span></li>
+                <li><strong>05</strong><span>Giấy bạc tự do hũ 4 (−) → kẹp vào <strong>chân ngắn (−) của LED 5 mm</strong></span></li>
+              </ul>
+            </article>
+
+            <article class="ed-plate ed-plate--ivory">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r09-led-on.webp" alt="Cận cảnh đèn LED 5 mm phát sáng" decoding="async">
+              <span class="ed-kicker">Nguyên lý cộng áp</span>
+              <h3 class="ed-plate-title">Vì sao không dùng 1 hũ?</h3>
+              <p class="ed-plate-text">1 hũ chỉ đạt 0,6–0,7 V — thấp hơn nhiều so với ngưỡng mở 1,8–2,0 V của đi-ốt LED 5 mm. Mắc nối tiếp 4 hũ đẩy điện áp lên 2,4–2,8 V, đủ mạnh để dòng electron vượt rào thế phát sáng rực rỡ.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="parchment-wrap parchment-wrap--framed">
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-head">
+              <h3 class="parchment-heading">Tóm lược Chương IV — Mạch nối tiếp 4 tế bào</h3>
+              <span class="parchment-tag">04 / 12 · Cộng điện áp</span>
+            </div>
+            <div class="parchment-cols">
+              <div class="parch-col">
+                <h4>Quy tắc nối tiếp</h4>
+                <p>Luôn nối dị cực giữa hai hũ liền kề (Al hũ trước nối Cu hũ sau). Dán băng keo cố định lên miệng hũ để không chạm cực khi rót nước.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Phân cực đèn LED 5 mm</h4>
+                <p>Chân dài là cực dương (Anode), chân ngắn (có cạnh vát phẳng trên gờ nhựa) là cực âm (Cathode). Mắc ngược chân LED sẽ không sáng.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Sẵn sàng nạp dung dịch</h4>
+                <p>Mạch đã hoàn chỉnh 100% — chỉ cần rót dung dịch nước muối chanh bổ sung 60 ml H₂O₂ 3% ở Chương V là đèn bừng sáng tức thì.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 5: DUNG DỊCH — MASONRY XEN KẼ KEM / MỰC (A1 + D3 | #229–#249)
+         ===================================================================== -->
+    <section id="ch05-pha-dung-dich" data-chapter="5" class="chapter chapter--ch05">
+      <div class="ch-painting">
+        <img loading="lazy" class="ch-bg" src="nguonanh/tinh/r05-lab-red.webp" alt="Không gian phòng thí nghiệm tông đỏ ấm" decoding="async">
+        <div class="ch-bg-dim" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+        <canvas id="ch05-atmosphere" style="position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;"></canvas>
+        <img loading="lazy" class="ch-fg ch05-fg-oxygia-vn" src="nguonanh/tinh/r-fg-oxygia-vn.webp" alt="Chai oxy già y tế Việt Nam 3%" decoding="async">
+        <img loading="lazy" class="ch-fg ch05-fg-amber" src="nguonanh/tinh/r-fg-h2o2-bottle.webp" alt="Chai nâu đựng H₂O₂ phòng thí nghiệm" decoding="async">
+        <img loading="lazy" class="ch-fg ch05-fg-mol" src="nguonanh/tinh/r-fg-h2o2-mol.webp" alt="Mô hình phân tử H₂O₂" decoding="async">
+        <img loading="lazy" class="ch-fg ch05-fg-lemon" src="nguonanh/tinh/r-fg-lemon-splash.webp" alt="Lát chanh tươi vắt lấy nước cốt" decoding="async">
+      </div>
+
+      <div class="ch-flow ch-flow--framed">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">Dung dịch</h2>
+          <p class="ch-subtitle"><span class="sub-cap">N</span>ước ấm, ba muỗng muối ăn, một quả chanh và đúng 60 ml oxy già 3% đánh thức ánh sáng</p>
+        </header>
+
+        <div class="ed-stage">
+          <!-- Tấm 1: Kem sáng chuẩn tạp chí — Công thức định lượng A1 -->
+          <article class="ed-plate ed-plate--ivory">
+            <div class="ed-split-60-40" style="align-items:center;">
+              <div>
+                <span class="ed-kicker">Công thức chuẩn duy nhất (A1)</span>
+                <h3 class="ed-plate-title" style="margin:0.4rem 0 1.2rem;">Định lượng cho trọn bộ bốn hũ pin</h3>
+                <div class="formula-bars">
+                  <div class="formula-bar-row">
+                    <span>Nước ấm</span>
+                    <div class="formula-track"><div class="formula-fill" style="width:94%;"></div></div>
+                    <strong class="font-mono">250–300 ml</strong>
+                  </div>
+                  <div class="formula-bar-row">
+                    <span>Muối ăn (NaCl)</span>
+                    <div class="formula-track"><div class="formula-fill" style="width:62%;"></div></div>
+                    <strong class="font-mono">3 muỗng</strong>
+                  </div>
+                  <div class="formula-bar-row">
+                    <span>Chanh / Giấm</span>
+                    <div class="formula-track"><div class="formula-fill" style="width:52%;"></div></div>
+                    <strong class="font-mono">1 quả / 3 m</strong>
+                  </div>
+                  <div class="formula-bar-row">
+                    <span style="color:#B43226;font-weight:600;">Oxy già H₂O₂ 3%</span>
+                    <div class="formula-track"><div class="formula-fill formula-fill--h2o2" style="width:78%;"></div></div>
+                    <strong class="font-mono" style="color:#B43226;">60 ml</strong>
+                  </div>
+                </div>
+              </div>
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r05-jar-lemon.webp" alt="Ly dung dịch nước muối và chanh" decoding="async">
+            </div>
+          </article>
+
+          <!-- Tấm 2: Bất đối xứng 60/40 Kem – Mực tôn vinh D3 -->
+          <div class="ed-split-60-40">
+            <article class="ed-plate ed-plate--ivory">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r05-oxygia-vn.webp" alt="Chai oxy già y tế Việt Nam 3% 60 ml" decoding="async">
+              <span class="ed-kicker">Thực tế đời thường · D3</span>
+              <h3 class="ed-plate-title">60 ml oxy già y tế 3%</h3>
+              <p class="ed-plate-text">Đúng 1 chai nhỏ mua tại hiệu thuốc (nồng độ 3% an toàn khi pha loãng trong ly dung dịch). Cho trực tiếp vào ly sau khi đã khuấy tan hết muối ăn.</p>
+            </article>
+
+            <article class="ed-plate ed-plate--dark">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <img loading="lazy" class="ed-photo ed-photo--tall" src="nguonanh/tinh/r05-h2o2-amber.webp" alt="Chai nâu đựng H₂O₂ phòng thí nghiệm" decoding="async">
+                <img loading="lazy" class="ed-photo ed-photo--tall" src="nguonanh/tinh/r05-h2o2-mol.webp" alt="Mô hình phân tử H₂O₂" decoding="async">
+              </div>
+              <span class="ed-kicker">Cấu trúc phân tử H–O–O–H</span>
+              <h3 class="ed-plate-title">Liên kết peroxo tăng lực khử</h3>
+              <p class="ed-plate-text">Liên kết O–O trong H₂O₂ kém bền nên nhận electron tại cực đồng dễ dàng hơn nhiều so với O₂ hòa tan từ không khí — giúp đèn LED 5 mm sáng rõ và bền hơn.</p>
+            </article>
+          </div>
+
+          <!-- Tấm 3: Đảo ngược 40/60 Mực – Kem -->
+          <div class="ed-split-40-60">
+            <article class="ed-plate ed-plate--dark">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r05-lemon-spl.webp" alt="Vắt chanh bổ sung axit vào dung dịch" decoding="async">
+              <span class="ed-kicker">Khuấy tan hoàn toàn</span>
+              <h3 class="ed-plate-title">Vì sao dùng nước ấm?</h3>
+              <p class="ed-plate-text">Nước ấm giúp 3 muỗng canh muối NaCl tan nhanh thành ion Na⁺, Cl⁻ tự do để dẫn điện tốt, đồng thời tăng tốc độ khuếch tán ion quanh bản nhôm.</p>
+            </article>
+
+            <article class="ed-plate ed-plate--ivory">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/exp-4cups-series-led.webp" alt="Khoảnh khắc rót xong hũ thứ 4 đèn LED 5 mm bừng sáng" decoding="async">
+              <span class="ed-kicker">Khoảnh khắc bừng sáng</span>
+              <h3 class="ed-plate-title">Rót mỗi hũ 65–75 ml (~2/3 hũ)</h3>
+              <p class="ed-plate-text">Rót từ tốn tránh làm ướt 2 cm mối xoắn trên miệng hũ. Đúng khoảnh khắc dung dịch ngập điện cực ở <strong>hũ thứ tư</strong>, mạch khép kín và đèn LED 5 mm lập tức sáng đỏ!</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="parchment-wrap parchment-wrap--framed">
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-head">
+              <h3 class="parchment-heading">Tóm lược Chương V — Pha chế dung dịch (A1)</h3>
+              <span class="parchment-tag">05 / 12 · Muối + Chanh + 60 ml H₂O₂</span>
+            </div>
+            <div class="parchment-cols">
+              <div class="parch-col">
+                <h4>Tỉ lệ chuẩn 1 bộ pin</h4>
+                <p>250–300 ml nước ấm + 3 muỗng canh muối ăn + nước cốt 1 quả chanh (hoặc 3 muỗng giấm) + <strong>60 ml oxy già H₂O₂ 3%</strong>.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Định mức rót từng hũ</h4>
+                <p>Chia đều <strong>65–75 ml</strong> cho mỗi hũ (~2/3 chiều cao), luôn chừa phần mối xoắn nhôm–đồng khô ráo phía trên.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Quan sát ngay tức thì</h4>
+                <p>Khi rót tới hũ thứ 4 đèn lập tức sáng; giảm ánh sáng phòng hoặc che tay quanh LED 5 mm sẽ thấy quầng đỏ cực rõ nét.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 6: ĐIỆN HÓA — MONOGRAPH BẢO TÀNG (B3 | #250 → #263)
+         ===================================================================== -->
+    <section id="ch06-dien-hoa" data-chapter="6" class="chapter chapter--ch06">
+      <div class="ch-painting">
+        <img loading="lazy" class="ch-bg" src="nguonanh/tinh/r06-spark.webp" alt="Tia điện năng lượng trên nền tối sâu" decoding="async">
+        <div class="ch-bg-dim" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+        <img loading="lazy" class="ch-fg ch06-fg-spark" src="nguonanh/tinh/r-fg-spark-burst.webp" alt="" aria-hidden="true">
+      </div>
+
+      <div class="ch-flow ch-flow--framed">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">Điện hóa</h2>
+          <p class="ch-subtitle"><span class="sub-cap">N</span>hôm bị oxi hóa nhường electron · đồng dẫn dòng điện tới O<sub>2</sub> và 60 ml H<sub>2</sub>O<sub>2</sub></p>
+        </header>
+
+        <div class="ed-stage">
+          <article class="ed-plate ed-plate--dark">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:0.8rem;">
+              <div>
+                <span class="ed-kicker">Mô phỏng vi mô 1 tế bào điện hóa</span>
+                <h3 class="ed-plate-title" style="margin-top:0.35rem;">Cân bằng electron: Nhường 12e⁻ = Nhận 12e⁻</h3>
+              </div>
+              <span class="chem-eq">4Al + 3O₂ + 6H₂O → 4Al(OH)₃↓</span>
+            </div>
+
+            <div class="series-svg-wrap">
+              <svg viewBox="0 0 920 260" width="100%" aria-label="Sơ đồ chuyển động electron và ion trong 1 tế bào pin nhôm đồng">
+                <path d="M210,74 L210,28 L710,28 L710,74" fill="none" stroke="rgba(217,168,98,0.35)" stroke-width="4"/>
+                <path d="M210,74 L210,28 L710,28 L710,74" fill="none" stroke="#F2CE88" stroke-width="3" class="electron-path-flow"/>
+                <text x="345" y="19" fill="#F2CE88" font-family="JetBrains Mono, monospace" font-size="11">Dòng electron (e⁻) →</text>
+                <text x="530" y="19" fill="#FF8A7A" font-family="JetBrains Mono, monospace" font-size="11">→ Thắp sáng LED 5 mm →</text>
+                <g transform="translate(460, 28)">
+                  <circle r="20" fill="rgba(255,75,62,0.28)"/>
+                  <circle r="9" fill="#FF4B3E" stroke="#FFF4D6" stroke-width="1.5"/>
+                </g>
+                <rect x="130" y="96" width="660" height="146" rx="10" fill="rgba(16, 52, 49, 0.42)" stroke="rgba(124, 242, 198, 0.25)" stroke-width="1.2"/>
+                <text x="460" y="128" text-anchor="middle" fill="#7CF2C6" font-family="JetBrains Mono, monospace" font-size="11">DUNG DỊCH: Na⁺ · Cl⁻ · H⁺ (Chanh) · H₂O₂ (60 ml)</text>
+                <rect x="186" y="70" width="48" height="142" rx="5" fill="#CBD5E1" stroke="#F8FAFC" stroke-width="1.4"/>
+                <text x="210" y="148" text-anchor="middle" fill="#171513" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700">Al (−)</text>
+                <text x="248" y="168" fill="#F5F0E6" font-family="JetBrains Mono, monospace" font-size="11">Al → Al³⁺ + 3e⁻</text>
+                <text x="248" y="186" fill="#9CA3AF" font-family="JetBrains Mono, monospace" font-size="10">E° = −1,66 V</text>
+                <rect x="686" y="70" width="48" height="142" rx="5" fill="#D98A3C" stroke="#F2CE88" stroke-width="1.4"/>
+                <text x="710" y="148" text-anchor="middle" fill="#171513" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700">Cu (+)</text>
+                <text x="498" y="164" fill="#F2CE88" font-family="JetBrains Mono, monospace" font-size="11">O₂ + 2H₂O + 4e⁻ → 4OH⁻</text>
+                <text x="498" y="184" fill="#FF9E8A" font-family="JetBrains Mono, monospace" font-size="11">H₂O₂ + 2e⁻ → 2OH⁻ (+0,88 V)</text>
+                <text x="460" y="226" text-anchor="middle" fill="#E5E7EB" font-family="JetBrains Mono, monospace" font-size="11">Al³⁺ + 3OH⁻ → Al(OH)₃↓ (kết tủa keo trắng)</text>
+              </svg>
+            </div>
+          </article>
+
+          <div class="ed-split-50">
+            <article class="ed-plate ed-plate--ivory">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r06-lightning.webp" alt="Năng lượng điện hóa thế khử cao" decoding="async">
+              <span class="ed-kicker">Thế điện cực chuẩn E° (vs SHE)</span>
+              <h3 class="ed-plate-title">Vì sao thêm 60 ml H<sub>2</sub>O<sub>2</sub> LED sáng mạnh hơn?</h3>
+              <table class="potential-table">
+                <thead>
+                  <tr><th>Cặp oxi hóa – khử</th><th>E° chuẩn</th><th>ΔE° lý thuyết</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Anot: <code>Al³⁺ / Al</code></td><td><code>−1,66 V</code></td><td>Nhường electron</td></tr>
+                  <tr><td>Catot: <code>O₂ / OH⁻</code></td><td><code>+0,40 V</code></td><td><code>2,06 V</code></td></tr>
+                  <tr><td><strong>Catot: <code>H₂O₂ / OH⁻</code></strong></td><td><strong style="color:#B43226;">+0,88 V</strong></td><td><strong style="color:#B43226;">2,54 V</strong></td></tr>
+                </tbody>
+              </table>
+              <p class="ed-plate-text">H₂O₂ nâng thế khử catot từ +0,40 V lên +0,88 V, giảm mạnh phân cực điện cực. Điện áp thực tế đạt 0,6–0,7 V/hũ do quá thế và nội trở dung dịch.</p>
+            </article>
+
+            <article class="ed-plate ed-plate--dark">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r06-beaker.webp" alt="Cốc phản ứng điện hóa phòng thí nghiệm" decoding="async">
+              <span class="ed-kicker">Cơ chế phá màng thụ động Al₂O₃</span>
+              <h3 class="ed-plate-title">Vai trò kép của Muối (Cl⁻) &amp; Axit (H⁺)</h3>
+              <p class="ed-plate-text">Bề mặt giấy bạc luôn phủ lớp oxit nhôm Al₂O₃ siêu mỏng cách điện khiến nhôm khó phản ứng trong nước thường.</p>
+              <div class="chem-eq" style="width:100%;text-align:center;">
+                Al₂O₃ + 6Cl⁻ + 6H⁺ → 2AlCl₃ + 3H₂O
+              </div>
+              <p class="ed-plate-text">Ion <strong>Cl⁻</strong> (từ NaCl) kết hợp <strong>H⁺</strong> (từ chanh/giấm) ăn mòn cục bộ phá tan lớp màng Al₂O₃, làm lộ nhôm kim loại trần để duy trì dòng electron liên tục, đồng thời biến dung dịch thành chất dẫn ion tốt.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="parchment-wrap parchment-wrap--framed">
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-head">
+              <h3 class="parchment-heading">Tóm lược Chương VI — Bản chất điện hóa (B3)</h3>
+              <span class="parchment-tag">06 / 12 · Oxi hóa – Khử</span>
+            </div>
+            <div class="parchment-cols">
+              <div class="parch-col">
+                <h4>Anot nhôm bị tiêu hao</h4>
+                <p><code>Al → Al³⁺ + 3e⁻</code> (E° = −1,66 V). Nhôm là nguồn cung cấp electron chính nên lá giấy bạc sẽ mỏng dần khi pin chạy lâu.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Catot đồng là cầu dẫn trơ</h4>
+                <p>Đồng không tan, chỉ dẫn electron gặp <code>O₂</code> (+0,40 V) và <code>H₂O₂</code> (+0,88 V) tạo <code>OH⁻</code>. Tổng cộng 2Al + 3H₂O₂ → 2Al(OH)₃↓.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Muối &amp; Chanh mở khóa phản ứng</h4>
+                <p>NaCl tạo Na⁺/Cl⁻ dẫn điện và cùng axit phá màng cách điện Al₂O₃ bọc ngoài lá nhôm.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 7: HIỆN TƯỢNG — TRIPTYCH OPERATIONS CÓ TẤM XANH NGỌC (#264 → #282)
+         ===================================================================== -->
+    <section id="ch07-hien-tuong" data-chapter="7" class="chapter chapter--ch07">
+      <div class="ch-painting">
+        <img loading="lazy" class="ch-bg" src="nguonanh/tinh/r07-lemon-bub.webp" alt="Bọt khí li ti trong dung dịch axit muối" decoding="async">
+        <div class="ch-bg-dim" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+        <canvas id="ch07-atmosphere" style="position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;"></canvas>
+        <img loading="lazy" class="ch-fg ch07-fg-drop" src="nguonanh/tinh/r-fg-lemon-drop.webp" alt="Giọt dung dịch chanh điện phân" decoding="async">
+      </div>
+
+      <div class="ch-flow ch-flow--framed">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">Hiện tượng</h2>
+          <p class="ch-subtitle"><span class="sub-cap">B</span>ọt khí li ti bám quanh điện cực · kết tủa keo trắng Al(OH)<sub>3</sub>↓ lắng dần dưới đáy hũ</p>
+        </header>
+
+        <div class="ed-stage">
+          <div class="bento-ops-grid">
+            <article class="ed-plate ed-plate--ivory">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r07-salt-macro.webp" alt="Cận cảnh tinh thể muối và bọt khí phản ứng" decoding="async">
+              <span class="ed-kicker">01 · Sủi bọt khí</span>
+              <h3 class="ed-plate-title">Bọt khí li ti quanh nhôm &amp; đồng</h3>
+              <p class="ed-plate-text">Khi lớp màng Al₂O₃ bị phá vỡ, một phần nhôm phản ứng phụ với axit nhẹ giải phóng bọt khí <strong>H₂</strong> nhỏ li ti, đồng thời H₂O₂ phân hủy nhẹ trên bề mặt kim loại sinh vi bọt <strong>O₂</strong>.</p>
+            </article>
+
+            <!-- Tấm trung tâm cao nổi màu Xanh Ngọc Trầm #103431 khớp khung #272 -->
+            <article class="ed-plate ed-plate--emerald">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r07-metal-drop.webp" alt="Dung dịch phản ứng tạo kết tủa keo trắng" decoding="async">
+              <span class="ed-kicker" style="color:rgba(167,243,208,0.72);">02 · Kết tủa đặc trưng</span>
+              <h3 class="ed-plate-title">Vẩn đục keo trắng Al(OH)<sub>3</sub>↓</h3>
+              <p class="ed-plate-text">Ion Al³⁺ từ cực âm gặp OH⁻ sinh ra ở cực dương tạo <strong>Al(OH)₃ kết tủa dạng keo trắng đục</strong>, lơ lửng trong dung dịch rồi lắng dần xuống đáy hũ sữa chua.</p>
+            </article>
+
+            <article class="ed-plate ed-plate--dark">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r07-lemon-mac.webp" alt="Bề mặt ăn mòn trong môi trường axit nhẹ" decoding="async">
+              <span class="ed-kicker">03 · Tiêu hao điện cực</span>
+              <h3 class="ed-plate-title">Lá nhôm mờ dần, đồng nguyên vẹn</h3>
+              <p class="ed-plate-text">Sau thời gian chạy liên tục, mặt giấy bạc chuyển xám nhám và mỏng dần do bị oxi hóa. Ngược lại, dây đồng hầu như không đổi khối lượng.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="parchment-wrap parchment-wrap--framed">
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-head">
+              <h3 class="parchment-heading">Đối chiếu Hiện tượng ↔ Hóa học ↔ Tuổi thọ pin</h3>
+              <span class="parchment-tag">07 / 12 · Bảng quan sát đầy đủ</span>
+            </div>
+            <div class="parchment-cols">
+              <div class="parch-col">
+                <h4>Bọt khí li ti nổi lên</h4>
+                <p>Chứng tỏ lớp màng Al₂O₃ đã mở và dung dịch đang hoạt động điện hóa mạnh. Nếu hoàn toàn không có bọt và đèn tắt, kiểm tra lại lượng muối/chanh.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Keo trắng Al(OH)<sub>3</sub> bám đáy</h4>
+                <p>Sản phẩm tất yếu của phản ứng tổng <code>Al³⁺ + 3OH⁻ → Al(OH)₃↓</code>. Lớp keo bám dày lên điện cực làm tăng điện trở trong theo thời gian.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Phục hồi độ sáng nhanh</h4>
+                <p>Lắc nhẹ hũ hoặc lau sạch lớp keo trên lá nhôm, châm thêm vài giọt H₂O₂ / thay bản giấy bạc mới sẽ khôi phục điện áp ngay lập tức.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 8: ĐO ĐIỆN ÁP — 3 KHUNG MÀN HÌNH DỌC SHOP APP + LIVE C1 (#283 → #297)
+         ===================================================================== -->
+    <section id="ch08-do-dien-ap" data-chapter="8" class="chapter chapter--ch08">
+      <div class="ch-painting">
+        <img loading="lazy" class="ch-bg" src="nguonanh/tinh/r08-instrument.webp" alt="Không gian khí cụ đo lường khoa học" decoding="async">
+        <div class="ch-bg-dim" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+        <img loading="lazy" class="ch-fg ch08-fg-theo" src="nguonanh/tinh/r-fg-theodolite.webp" alt="Dụng cụ đo cổ điển" decoding="async">
+        <img loading="lazy" class="ch-fg ch08-fg-multi" src="nguonanh/tinh/r-fg-multimeter.webp" alt="Đồng hồ vạn năng số đo điện áp DC" decoding="async">
+      </div>
+
+      <div class="ch-flow ch-flow--framed">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">Đo điện áp</h2>
+          <p class="ch-subtitle"><span class="sub-cap">K</span>iểm chứng định lượng bằng đồng hồ vạn năng DC 20 V — nhập số đo thật ngay lúc thuyết trình</p>
+        </header>
+
+        <div class="ed-stage">
+          <div class="screens-trio">
+            <!-- Khung dọc 1 (Kem sáng): Mốc tham khảo học thuật -->
+            <article class="device-screen device-screen--ivory">
+              <div class="device-notch" aria-hidden="true"></div>
+              <span class="ed-kicker">01 · Mốc chuẩn học thuật</span>
+              <h3 class="ed-plate-title">Dải điện áp đối chiếu</h3>
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r08-multimeter.webp" alt="Đồng hồ vạn năng đo điện áp" decoding="async">
+              <div class="ref-metric">
+                <span>1 hũ đơn lẻ</span>
+                <strong>0,6–0,7 V</strong>
+              </div>
+              <div class="ref-metric">
+                <span>4 hũ nối tiếp</span>
+                <strong>2,4–2,8 V</strong>
+              </div>
+              <div class="ref-metric" style="border-bottom:0;">
+                <span>Ngưỡng LED 5 mm đỏ</span>
+                <strong style="color:#B43226;">1,8–2,0 V</strong>
+              </div>
+              <p class="ed-plate-text" style="font-size:0.80rem;margin-top:auto;">Nguồn đối chiếu: University of Washington CEI, Exploratorium &amp; Datasheet Vishay / Kingbright.</p>
+            </article>
+
+            <!-- Khung dọc 2 (Mực tối): BẢNG NHẬP SỐ ĐO THỰC NGHIỆM LIVE (C1) -->
+            <article class="device-screen device-screen--dark">
+              <div class="device-notch" aria-hidden="true"></div>
+              <span class="ed-kicker">02 · Nhập số đo thực tế (Live)</span>
+              <h3 class="ed-plate-title">Đồng hồ DC 20 V</h3>
+
+              <div class="lcd-input-group">
+                <label for="input-v-1cup">1 hũ chưa nối đèn (hở mạch)</label>
+                <div class="lcd-input-wrap">
+                  <input id="input-v-1cup" class="lcd-input" type="number" step="0.01" min="0" max="10" placeholder="VD: 0.68" inputmode="decimal">
+                  <span class="lcd-unit">V</span>
+                </div>
+              </div>
+
+              <div class="lcd-input-group">
+                <label for="input-v-4open">Bộ 4 hũ chưa nối đèn (hở mạch)</label>
+                <div class="lcd-input-wrap">
+                  <input id="input-v-4open" class="lcd-input" type="number" step="0.01" min="0" max="10" placeholder="VD: 2.65" inputmode="decimal">
+                  <span class="lcd-unit">V</span>
+                </div>
+              </div>
+
+              <div class="lcd-input-group">
+                <label for="input-v-4load">Bộ 4 hũ khi LED đang sáng (có tải)</label>
+                <div class="lcd-input-wrap">
+                  <input id="input-v-4load" class="lcd-input" type="number" step="0.01" min="0" max="10" placeholder="VD: 2.10" inputmode="decimal">
+                  <span class="lcd-unit">V</span>
+                </div>
+              </div>
+
+              <div id="voltage-drop-readout" class="chem-eq" style="width:100%;font-size:0.77rem;text-align:center;margin-top:auto;">
+                Nhập cả 2 ô 4 hũ để tự tính độ sụt áp nội trở ΔV
+              </div>
+            </article>
+
+            <!-- Khung dọc 3 (Mực tối): Biểu đồ cột SVG & Mô phỏng độ sáng LED 5 mm -->
+            <article class="device-screen device-screen--dark">
+              <div class="device-notch" aria-hidden="true"></div>
+              <span class="ed-kicker">03 · Biểu đồ &amp; Quang phổ LED</span>
+              <h3 class="ed-plate-title">So với ngưỡng 1,8 V</h3>
+
+              <svg viewBox="0 0 280 215" width="100%" aria-label="Biểu đồ cột so sánh điện áp thực đo với ngưỡng 1,8 V của LED">
+                <line x1="20" y1="175" x2="264" y2="175" stroke="rgba(245,240,230,0.28)" stroke-width="1.2"/>
+                <line x1="20" y1="102" x2="264" y2="102" stroke="#FF4B3E" stroke-width="1.4" stroke-dasharray="5 4"/>
+                <text x="22" y="95" text-anchor="start" fill="#FF8A7A" font-family="JetBrains Mono, monospace" font-size="9.5">Ngưỡng LED 1,8 V</text>
+
+                <rect id="svg-bar-1cup" x="38" y="148" width="44" height="27" rx="4" fill="#9CA3AF" style="transition:all 0.35s ease;"/>
+                <text id="svg-lbl-1cup" x="60" y="141" text-anchor="middle" fill="#E5E7EB" font-family="JetBrains Mono, monospace" font-size="10">~0,7 V</text>
+                <text x="60" y="194" text-anchor="middle" fill="#9CA3AF" font-family="Be Vietnam Pro, sans-serif" font-size="10">1 hũ</text>
+
+                <rect id="svg-bar-4open" x="118" y="70" width="44" height="105" rx="4" fill="#D9A862" style="transition:all 0.35s ease;"/>
+                <text id="svg-lbl-4open" x="140" y="63" text-anchor="middle" fill="#F2CE88" font-family="JetBrains Mono, monospace" font-size="10">~2,6 V</text>
+                <text x="140" y="194" text-anchor="middle" fill="#F5F0E6" font-family="Be Vietnam Pro, sans-serif" font-size="10">4 hũ (hở)</text>
+
+                <rect id="svg-bar-4load" x="198" y="94" width="44" height="81" rx="4" fill="#FF4B3E" style="transition:all 0.35s ease;"/>
+                <text id="svg-lbl-4load" x="220" y="87" text-anchor="middle" fill="#FFD5D1" font-family="JetBrains Mono, monospace" font-size="10">~2,0 V</text>
+                <text x="220" y="194" text-anchor="middle" fill="#F5F0E6" font-family="Be Vietnam Pro, sans-serif" font-size="10">Có LED</text>
+              </svg>
+
+              <div class="led-live-box" style="margin-top:auto;">
+                <img loading="lazy" id="led-sim-bulb" class="led-sim-bulb is-bright" src="nguonanh/tinh/r-fg-led-red-on.webp" alt="Mô phỏng bóng LED 5 mm" decoding="async">
+                <div>
+                  <div style="font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(245,240,230,0.56);">Trạng thái LED 5 mm</div>
+                  <div id="led-sim-status" style="font-size:0.85rem;font-weight:500;margin-top:0.2rem;color:#FF8A7A;">Tham khảo 4 hũ: ~2,6 V · LED sáng rực</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="parchment-wrap parchment-wrap--framed">
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-head">
+              <h3 class="parchment-heading">Tóm lược Chương VIII — Kỹ thuật đo đồng hồ vạn năng</h3>
+              <span class="parchment-tag">08 / 12 · Thang DC 20 V</span>
+            </div>
+            <div class="parchment-cols">
+              <div class="parch-col">
+                <h4>Đặt đúng thang &amp; que đo</h4>
+                <p>Vặn đồng hồ sang thang điện áp một chiều <strong>DC 20 V</strong>. Chạm que đỏ vào dây đồng hũ 1 (+), que đen vào giấy bạc hũ 4 (−).</p>
+              </div>
+              <div class="parch-col">
+                <h4>Vì sao có tải lại sụt áp?</h4>
+                <p>Khi mắc LED có dòng chạy qua, dung dịch có điện trở trong <code>r</code> nên xảy ra sụt áp <code>U = E − I·r</code>. Điện áp có tải luôn thấp hơn hở mạch.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Tự lưu số đo thực tế</h4>
+                <p>Số đo bạn gõ trực tiếp ở màn hình giữa được tự động lưu ngay trên trình duyệt để trình bày số liệu thật của nhóm trước lớp.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 9: AN TOÀN — BÀN CỜ BIÊN TẬP B2B 2×2 (#298 → #311)
+         ===================================================================== -->
+    <section id="ch09-an-toan" data-chapter="9" class="chapter chapter--ch09">
+      <div class="ch-painting">
+        <img loading="lazy" class="ch-bg" src="nguonanh/tinh/r09-hermitage.webp" alt="Không gian bảo tàng cổ điển" decoding="async">
+        <div class="ch-bg-dim" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+        <img loading="lazy" class="ch-fg ch09-fg-led" src="nguonanh/tinh/r-fg-led-green-on.webp" alt="Đèn LED 5 mm xanh lục báo hiệu an toàn" decoding="async">
+      </div>
+
+      <div class="ch-flow ch-flow--framed">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">An toàn</h2>
+          <p class="ch-subtitle"><span class="sub-cap">B</span>ốn quy tắc sống còn chống đoản mạch cục bộ, đúng chiều LED và an toàn dung dịch H<sub>2</sub>O<sub>2</sub></p>
+        </header>
+
+        <div class="ed-stage">
+          <div class="ed-split-50">
+            <article class="ed-plate ed-plate--dark">
+              <div class="rule-num">01</div>
+              <h3 class="ed-plate-title">Mối xoắn nhôm – đồng bắt buộc phải khô</h3>
+              <p class="ed-plate-text">Tuyệt đối không dìm chỗ xoắn dây đồng và giấy bạc xuống nước muối. Nếu ngập nước sẽ sinh đoản mạch ngay tại mối nối, ăn mòn lá nhôm nhanh mà dòng không qua đèn.</p>
+            </article>
+
+            <article class="ed-plate ed-plate--ivory">
+              <div class="rule-num">02</div>
+              <h3 class="ed-plate-title">Hai cực cùng hũ đặt đối diện, cách <span style="white-space:nowrap;">2–3 cm</span></h3>
+              <p class="ed-plate-text">Trong cùng 1 hũ, bản nhôm và dây đồng phải nằm ở hai mép đối diện nhau, cố định bằng băng keo — chỉ cần chạm nhẹ vào nhau là tế bào đó tự đoản mạch mất áp ngay.</p>
+            </article>
+
+            <article class="ed-plate ed-plate--ivory">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r09-led-on.webp" alt="Đèn LED 5 mm phát sáng đúng cực" decoding="async">
+              <div class="rule-num">03</div>
+              <h3 class="ed-plate-title">Chưa sáng → thử đảo chiều chân LED trước</h3>
+              <p class="ed-plate-text">Đèn LED 5 mm là đi-ốt chỉ dẫn điện một chiều từ <strong>chân dài (+)</strong> sang <strong>chân ngắn (−)</strong>. Đảo ngược cực sẽ không làm hỏng đèn nhưng đèn sẽ không sáng.</p>
+            </article>
+
+            <article class="ed-plate ed-plate--dark">
+              <img loading="lazy" class="ed-photo" src="nguonanh/tinh/r05-oxygia-vn.webp" alt="An toàn hóa chất với dung dịch chứa 60 ml oxy già 3%" decoding="async">
+              <div class="rule-num">04</div>
+              <h3 class="ed-plate-title">Rút rửa lau khô &amp; An toàn dung dịch H<sub>2</sub>O<sub>2</sub></h3>
+              <p class="ed-plate-text">Thí nghiệm xong rút ngay điện cực rửa sạch, lau khô để tái sử dụng. Dung dịch chứa muối, axit và <strong>60 ml oxy già 3%</strong> — không ăn uống, tránh bắn vào mắt và rửa tay sạch sau khi làm.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="parchment-wrap parchment-wrap--framed">
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-head">
+              <h3 class="parchment-heading">Tóm lược Chương IX — Kỷ luật thí nghiệm</h3>
+              <span class="parchment-tag">09 / 12 · Bền áp &amp; An toàn</span>
+            </div>
+            <div class="parchment-cols">
+              <div class="parch-col">
+                <h4>Phòng đoản mạch</h4>
+                <p>Mối xoắn khô phía trên + khoảng cách 2–3 cm phía dưới giúp 100% dòng electron buộc phải đi vòng qua bóng LED 5 mm.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Bảo quản qua đêm</h4>
+                <p>Không ngâm lá giấy bạc trong dung dịch qua đêm để tránh nhôm bị hòa tan sạch thành kết tủa Al(OH)₃.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Xử lý sau thí nghiệm</h4>
+                <p>Đổ bỏ dung dịch loãng xuống bồn rửa kèm nước sạch, rửa tay xà phòng và cất khô bộ dây đồng cho lần trình diễn sau.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 10: XỬ LÝ LỖI — SỔ CHẨN ĐOÁN BẢO TÀNG FINANCE (#312 → #327)
+         ===================================================================== -->
+    <section id="ch10-xu-ly-loi" data-chapter="10" class="chapter chapter--ch10">
+      <div class="ch-painting">
+        <img loading="lazy" class="ch-bg" src="nguonanh/tinh/r10-gallery.webp" alt="Phòng trưng bày cổ điển ánh sáng ấm" decoding="async">
+        <div class="ch-bg-dim" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+        <img loading="lazy" class="ch-fg ch10-fg-trio" src="nguonanh/tinh/r-fg-leds-trio.webp" alt="Ba bóng đèn LED 5 mm đỏ vàng xanh" decoding="async">
+        <img loading="lazy" class="ch-fg ch10-fg-yellow" src="nguonanh/tinh/r-fg-led-yellow-on.webp" alt="Đèn LED 5 mm vàng phát sáng" decoding="async">
+      </div>
+
+      <div class="ch-flow ch-flow--framed">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">Xử lý lỗi</h2>
+          <p class="ch-subtitle"><span class="sub-cap">Q</span>uy trình chẩn đoán năm bước từ dễ đến khó — chạm trực tiếp vào từng mục để đánh dấu</p>
+        </header>
+
+        <div class="ed-stage">
+          <article class="ed-plate ed-plate--ivory">
+            <div class="diag-ledger">
+              <div style="display:flex;flex-direction:column;gap:1.1rem;">
+                <span class="ed-kicker">Kiểm tra trực quan 3 vùng trọng yếu</span>
+                <div class="diag-visual-col">
+                  <img loading="lazy" src="nguonanh/tinh/r02-led.webp" alt="Kiểm tra chiều chân đèn LED 5 mm" decoding="async">
+                  <img loading="lazy" src="nguonanh/tinh/vl-hu.webp" alt="Kiểm tra vị trí hai cực trong hũ sữa chua" decoding="async">
+                  <img loading="lazy" src="nguonanh/tinh/r05-jar-lemon.webp" alt="Kiểm tra nồng độ dung dịch điện phân" decoding="async">
+                </div>
+                <p class="ed-plate-text" style="font-size:0.86rem;">
+                  <strong>Mẹo khoanh vùng nhanh:</strong> Dùng đồng hồ thang DC 20 V đo từng hũ — hũ nào &lt; 0,4 V là hũ đang bị chạm hai cực bên trong hoặc lỏng cầu nối.
+                </p>
+              </div>
+
+              <div class="diag-list">
+                <span class="ed-kicker" style="margin-bottom:0.25rem;">Danh sách chẩn đoán tương tác (01 → 05)</span>
+                <button type="button" class="diag-check-item" aria-pressed="false">
+                  <span class="diag-box">✓</span>
+                  <span><strong>Bước 1 — Đảo chiều chân LED:</strong> Kiểm tra chân dài (+) nối đồng hũ 1, chân ngắn (−) nối nhôm hũ 4.</span>
+                </button>
+                <button type="button" class="diag-check-item" aria-pressed="false">
+                  <span class="diag-box">✓</span>
+                  <span><strong>Bước 2 — Siết chặt các mối nối:</strong> Xoắn lại 3 cầu nối nhôm–đồng và 2 điểm kẹp vào chân đèn.</span>
+                </button>
+                <button type="button" class="diag-check-item" aria-pressed="false">
+                  <span class="diag-box">✓</span>
+                  <span><strong>Bước 3 — Mối xoắn có ướt không?</strong> Nếu bị ngập dung dịch, nâng lên trên miệng hũ và lau khô ngay.</span>
+                </button>
+                <button type="button" class="diag-check-item" aria-pressed="false">
+                  <span class="diag-box">✓</span>
+                  <span><strong>Bước 4 — Hai cực có chạm nhau?</strong> Tách lá nhôm và dây đồng trong từng hũ ra đúng 2–3 cm.</span>
+                </button>
+                <button type="button" class="diag-check-item" aria-pressed="false">
+                  <span class="diag-box">✓</span>
+                  <span><strong>Bước 5 — Muối tan hết &amp; đủ 60 ml H₂O₂?</strong> Khuấy tan hết muối, thêm chanh/oxy già và thử che tối quanh bóng LED 5 mm để nhìn rõ ánh đỏ.</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="parchment-wrap parchment-wrap--framed">
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-head">
+              <h3 class="parchment-heading">Tóm lược Chương X — Khoanh vùng lỗi trong 30 giây</h3>
+              <span class="parchment-tag">10 / 12 · Chẩn đoán nhanh</span>
+            </div>
+            <div class="parchment-cols">
+              <div class="parch-col">
+                <h4>80% lỗi do ngược chân LED</h4>
+                <p>Luôn thử đảo 2 chân bóng LED 5 mm đầu tiên trước khi tháo cả bộ mạch 4 hũ.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Kiểm tra độ kín mạch nối tiếp</h4>
+                <p>Đảm bảo không có hũ nào bị nối nhầm đồng với đồng hoặc nhôm với nhôm (cùng cực triệt tiêu áp).</p>
+              </div>
+              <div class="parch-col">
+                <h4>Thử LED bằng pin tiểu 3 V</h4>
+                <p>Chạm nhanh bóng LED 5 mm vào pin đồng xu 3 V để chắc chắn bản thân bóng LED vẫn hoạt động tốt.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 11: HỎI & ĐÁP — TẬP HỒ SƠ BIÊN TẬP SHIPPING (#328 → #339)
+         ===================================================================== -->
+    <section id="ch11-hoi-dap" data-chapter="11" class="chapter chapter--ch11">
+      <div class="ch-painting">
+        <img loading="lazy" class="ch-bg" src="nguonanh/tinh/r11-florence.webp" alt="Vòm cổ Florence sâu lắng trong đêm" decoding="async">
+        <div class="ch-bg-dim" aria-hidden="true"></div>
+        <div class="ch-bg-scrim" aria-hidden="true"></div>
+      </div>
+
+      <div class="ch-flow ch-flow--framed">
+        <header class="ch-title-stage">
+          <h2 class="ch-title">Hỏi &amp; Đáp</h2>
+          <p class="ch-subtitle"><span class="sub-cap">S</span>áu câu hỏi trọng tâm phản biện thí nghiệm — chạm vào từng thẻ để mở lời giải súc tích</p>
+        </header>
+
+        <div class="ed-stage">
+          <div class="qa-grid">
+            <article class="qa-card">
+              <button type="button" class="qa-trigger" aria-expanded="false">
+                <span class="qa-q">01. Vì sao chọn cặp kim loại Nhôm và Đồng?</span>
+                <span class="qa-plus">+</span>
+              </button>
+              <div class="qa-answer-wrap"><div class="qa-answer-inner">
+                <p class="qa-answer">Nhôm có tính khử rất mạnh (E° = −1,66 V) và cực dễ tìm (giấy bạc bếp) nên dễ bị oxi hóa nhường electron ở cực âm. Đồng bền, dẫn điện xuất sắc và dễ tuốt từ dây điện dân dụng để làm cực dương nơi electron gặp O₂ và H₂O₂.</p>
+              </div></div>
+            </article>
+
+            <article class="qa-card qa-card--light">
+              <button type="button" class="qa-trigger" aria-expanded="false">
+                <span class="qa-q">02. Vì sao bắt buộc phải nối tiếp 4 hũ?</span>
+                <span class="qa-plus">+</span>
+              </button>
+              <div class="qa-answer-wrap"><div class="qa-answer-inner">
+                <p class="qa-answer">Mỗi hũ pin nhôm – đồng chỉ đạt khoảng 0,6–0,7 V, chưa đủ vượt ngưỡng mở 1,8–2,0 V của đèn LED 5 mm đỏ. Mắc nối tiếp 4 hũ giúp cộng dồn hiệu điện thế lên 2,4–2,8 V để đèn bật sáng rõ nét.</p>
+              </div></div>
+            </article>
+
+            <article class="qa-card qa-card--light">
+              <button type="button" class="qa-trigger" aria-expanded="false">
+                <span class="qa-q">03. Vì sao thêm 60 ml oxy già H<sub>2</sub>O<sub>2</sub> 3% đèn lại sáng hơn?</span>
+                <span class="qa-plus">+</span>
+              </button>
+              <div class="qa-answer-wrap"><div class="qa-answer-inner">
+                <p class="qa-answer">Ở cực đồng, O₂ hòa tan trong nước có nồng độ rất thấp (E° = +0,40 V) dễ gây phân cực làm sụt áp nhanh. Bổ sung 60 ml H₂O₂ 3% cung cấp chất oxi hóa mạnh hơn (H₂O₂ + 2e⁻ → 2OH⁻, E° = +0,88 V), đẩy mạnh dòng điện và giúp bóng LED 5 mm sáng rực, bền hơn.</p>
+              </div></div>
+            </article>
+
+            <article class="qa-card">
+              <button type="button" class="qa-trigger" aria-expanded="false">
+                <span class="qa-q">04. Vì sao mối xoắn nhôm – đồng phải giữ khô?</span>
+                <span class="qa-plus">+</span>
+              </button>
+              <div class="qa-answer-wrap"><div class="qa-answer-inner">
+                <p class="qa-answer">Nếu mối xoắn bị ngập dung dịch điện phân, nhôm và đồng tiếp xúc trực tiếp ngay trong nước muối sẽ tạo pin ăn mòn cục bộ (ngắn mạch tại chỗ) — electron đi tắt ngay tại mối nối mà không chạy qua bóng LED.</p>
+              </div></div>
+            </article>
+
+            <article class="qa-card">
+              <button type="button" class="qa-trigger" aria-expanded="false">
+                <span class="qa-q">05. Vì sao đảo chân LED 5 mm thì đèn mới sáng?</span>
+                <span class="qa-plus">+</span>
+              </button>
+              <div class="qa-answer-wrap"><div class="qa-answer-inner">
+                <p class="qa-answer">LED (Light Emitting Diode) là linh kiện bán dẫn chỉ cho dòng điện đi qua một chiều duy nhất: từ chân dài (Anode +) sang chân ngắn (Cathode −). Đảo đúng chiều mạch sẽ lập tức thông dòng và phát sáng.</p>
+              </div></div>
+            </article>
+
+            <article class="qa-card qa-card--light">
+              <button type="button" class="qa-trigger" aria-expanded="false">
+                <span class="qa-q">06. Pin dùng được bao lâu và có tái sử dụng được không?</span>
+                <span class="qa-plus">+</span>
+              </button>
+              <div class="qa-answer-wrap"><div class="qa-answer-inner">
+                <p class="qa-answer">Pin có thể thắp sáng LED nhiều giờ liên tục và yếu dần khi bản giấy bạc nhôm chuyển thành Al(OH)₃↓. Sau khi dùng chỉ cần rút điện cực rửa sạch, lau khô; lần sau thay giấy bạc mới và giữ nguyên bộ dây đồng cùng 4 hũ để tái sử dụng.</p>
+              </div></div>
+            </article>
+          </div>
+        </div>
+
+        <div class="parchment-wrap parchment-wrap--framed">
+          <div class="parchment-sheet parchment-grain">
+            <div class="parchment-head">
+              <h3 class="parchment-heading">Hướng mở rộng nghiên cứu từ thí nghiệm</h3>
+              <span class="parchment-tag">11 / 12 · Khám phá tiếp theo</span>
+            </div>
+            <div class="parchment-cols">
+              <div class="parch-col">
+                <h4>Thắp LED xanh / trắng</h4>
+                <p>LED xanh dương hoặc trắng cần ngưỡng 3,0–3,3 V — chỉ cần ghép nối tiếp thêm thành <strong>6 hũ</strong> là đủ điện áp thắp sáng.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Tận dụng vỏ lon nhôm</h4>
+                <p>Cắt dải nhôm dày từ vỏ lon nước ngọt (đã chà sạch lớp sơn) giúp cực âm bền gấp nhiều lần giấy bạc bếp.</p>
+              </div>
+              <div class="parch-col">
+                <h4>Đo công suất &amp; nội trở</h4>
+                <p>Kết hợp điện trở chuẩn và đồng hồ đo cường độ dòng (mA) để vẽ đường đặc tuyến phóng điện theo thời gian.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHƯƠNG 12: FINALE — CÚ ĐẢO NGƯỢC THỊ GIÁC 180° HIGH-KEY SEPIA (#340–#346)
+         Nền giấy kem sáng #ECE5D8 + Tranh khắc đồng nét mực Sepia Phục Hưng
+         + Chữ ĐEN MỰC #191715 + Màn kết Colophon lời cảm ơn cỡ lớn không đè tranh
+         ===================================================================== -->
+    <section id="ch12-ket-bai" data-chapter="12" class="section-finale parchment-grain">
+      <div class="finale-stage">
+        <div class="finale-paper-glow" aria-hidden="true"></div>
+        <canvas id="ch12-atmosphere" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;"></canvas>
+        <img loading="lazy" class="finale-statue" id="ch12-statue" src="nguonanh/tinh/r12-finale-engraving.webp" alt="Bản khắc đồng nét mực sepia Phục Hưng — học giả cầm bình thủy tinh ánh sáng tri thức" decoding="async">
+      </div>
+
+      <div class="finale-flow">
+        <header class="finale-hero">
+          <h2 class="finale-title">Điều rút ra</h2>
+          <p class="finale-subtitle"><span class="sub-cap">K</span>hoa học điện hóa hiện hữu ngay trong bốn hũ sữa chua đời thường</p>
+        </header>
+
+        <div class="finale-cards-wrap">
+          <article class="finale-card">
+            <img loading="lazy" src="nguonanh/tinh/r06-beaker.webp" alt="Phản ứng điện hóa nhôm đồng và oxy già" decoding="async">
+            <span class="ed-kicker">01 · Bản chất hóa học</span>
+            <h3>Nhôm nhường, đồng dẫn</h3>
+            <p>Nhôm bị oxi hóa ở cực âm (E° = −1,66 V); đồng dẫn electron tới O<sub>2</sub> và <strong>60 ml H<sub>2</sub>O<sub>2</sub> 3%</strong> (+0,88 V) ở cực dương tạo dòng điện bền vững.</p>
+          </article>
+
+          <article class="finale-card">
+            <img loading="lazy" src="nguonanh/tinh/exp-4cups-series-led.webp" alt="Bốn hũ sữa chua nối tiếp thắp sáng đèn LED 5 mm" decoding="async">
+            <span class="ed-kicker">02 · Kiến trúc mạch điện</span>
+            <h3>Bốn hũ nối tiếp vượt ngưỡng</h3>
+            <p>Ghép nối tiếp 4 tế bào cộng điện áp lên <strong>2,4–2,8 V</strong>, vượt ngưỡng 1,8–2,0 V để đánh thức ánh sáng trong bóng đèn LED 5 mm.</p>
+          </article>
+
+          <article class="finale-card">
+            <img loading="lazy" src="nguonanh/tinh/r08-multimeter.webp" alt="Đo kiểm thực nghiệm và vận hành an toàn" decoding="async">
+            <span class="ed-kicker">03 · Thực hành &amp; An toàn</span>
+            <h3>Kiểm chứng &amp; Tái sử dụng</h3>
+            <p>Giữ mối xoắn khô, cách cực 2–3 cm, đo kiểm trực tiếp bằng đồng hồ DC 20 V, rút rửa lau khô điện cực và tuân thủ an toàn hóa chất.</p>
+          </article>
+        </div>
+
+        <!-- MÀN KẾT COLOPHON LỚN: LỜI CẢM ƠN SẮC NÉT CẠNH BẢN KHẮC ĐỒNG SEPIA (0 ĐÈ CHỮ!) -->
+        <footer class="finale-thanks" id="ch12-thanks">
+          <div class="finale-thanks-ornament">
+            <svg class="finale-thanks-star" id="ch12-thanks-star" viewBox="0 0 36 36" aria-hidden="true">
+              <path d="M18 1 L20.8 15.2 L35 18 L20.8 20.8 L18 35 L15.2 20.8 L1 18 L15.2 15.2 Z" fill="#8C622C"/>
+            </svg>
+            <div class="finale-thanks-rule" id="ch12-thanks-rule" aria-hidden="true"></div>
+          </div>
+          <h2 class="finale-thanks-heading" id="ch12-thanks-heading">
+            <span class="thanks-line">Cảm ơn thầy và các bạn</span>
+            <span class="thanks-line">đã dành thời gian quý báu của mình</span>
+            <span class="thanks-line thanks-line--accent">để xem bài thuyết trình của nhóm</span>
+          </h2>
+          <p class="finale-thanks-sub">Ánh sáng từ bốn hũ sữa chua — The RenAIssance Edition</p>
+        </footer>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Thư viện lõi cục bộ -->
+  <script src="assets/js/vendor/gsap.min.js"></script>
+  <script src="assets/js/vendor/ScrollTrigger.min.js"></script>
+  <script src="assets/js/vendor/lenis.min.js"></script>
+  <script src="assets/js/vendor/three.min.js"></script>
+
+  <!-- Dữ liệu nội dung & hóa học -->
+  <script src="nguondulieu/anh-manifest.js"></script>
+  <script src="nguondulieu/hoahoc.js"></script>
+  <script src="nguondulieu/noidung.js"></script>
+
+  <!-- Gói texture Data URI sạch cho WebGL2 Intro Shader (0 lỗi CORS trên file://) -->
+  <script src="assets/js/data/intro-textures.js"></script>
+
+  <!-- Engine trình chiếu -->
+  <script src="assets/js/engine/nav.js"></script>
+  <script src="assets/js/engine/notes.js"></script>
+  <script src="assets/js/engine/atmosphere.js"></script>
+  <script src="assets/js/engine/intro-dissolve.js"></script>
+  <script src="assets/js/engine/oculus-3d.js"></script>
+  <script src="assets/js/engine/interactive.js"></script>
+  <script src="assets/js/engine/loader.js"></script>
+  <script src="assets/js/engine/scene-runner.js"></script>
+</body>
+</html>
